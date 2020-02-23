@@ -40,6 +40,7 @@
         <br>
         <form method="post">
             <div class="form-group">
+                 {% csrf_token %}
                 <label for="vacanc">Введите название вакансии (или язык программирования, например: PYTHON)</label>
                 <input type="input" name="vacanc" class="form-control" id="vacanc" placeholder="ВВЕДИТЕ ПРЕДПОЧИТАЕМЫЙ ЯЗЫК ПРОГРАММИРОВАНИЯ (название вакансии: PYTHON DEVELOPER)">
                 <small id="vacancyHelp" class="form-text text-muted"> НАПРИМЕР: PYTHON DEVELOPER </small>
