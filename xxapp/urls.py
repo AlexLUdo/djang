@@ -1,27 +1,19 @@
-"""whatis URL Configuration
-
-The `urlpatterns` list routes URLs to views. For more information please see:
-    https://docs.djangoproject.com/en/3.0/topics/http/urls/
-Examples:
-Function views
-    1. Add an import:  from my_app import views
-    2. Add a URL to urlpatterns:  path('', views.home, name='home')
-Class-based views
-    1. Add an import:  from other_app.views import Home
-    2. Add a URL to urlpatterns:  path('', Home.as_view(), name='home')
-Including another URLconf
-    1. Import the include() function: from django.urls import include, path
-    2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
-"""
 from xxapp import views
 from django.urls import path
 
 app_name = 'xxapp'
 
 urlpatterns = [
-    path('', views.main_view),
-    path('address/', views.contact),
-    path('zapros/', views.zapros),
-    path('base/', views.zapros),
-    #path('rezultatb/', views.rezultatb),
+    path('', views.main_view, name='index'),
+    path('address/', views.contact, name='contact'),
+    path('zapros/', views.zapros, name='zapros'),
+    path('base/', views.zaprosb, name='zaprosb'),
+    path('vacancy/', views.VacancyView.as_view(), name='vacancyl'),
+    path('vacancyc/', views.VacancyCreate.as_view(), name='vacancyc'),
+    path('vac_update/<int:pk>/', views.VacancyUpd.as_view(), name='vac_update'),
+    path('vac_delete/<int:pk>/', views.VacDeleteView.as_view(), name='vac_delete'),
+    path('vac_det/<int:pk>/', views.VacDetailView.as_view(), name='vac_det'),
+    path('article/', views.ArticleView.as_view(),  name='article'),
+    path('articled/<int:pk>/', views.ArtDeleteView.as_view(),  name='art_del')
 ]
+

@@ -1,0 +1,27 @@
+{% extends "base1.html" %}
+{% block title %} Статьи загруженные в нашу базу {% endblock %}
+
+
+{% block content %}
+
+<div>
+           
+   <h1> Статьи 3DNEWS и ссылки на них НАШЕЙ БАЗЕ: </h1><br>
+        
+        {%for item in object_list%}
+
+        <li>
+            Статья: {{item.art}}
+            <a class="nav-link" href="{{item.ul}}"> {{item.ul}} </a> 
+        </li>
+
+		<a href="{% url 'xxapp:art_del' pk=item.pk %}">
+        <font color="red"> Удалить статью? </font>
+        </a>
+
+        {% endfor %}
+</div>
+            
+
+
+{% endblock %}

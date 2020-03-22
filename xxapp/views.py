@@ -1,13 +1,11 @@
-from django.shortcuts import render
-# from .models import Vacancy
-from .forms import Vacform
-# from django.core.management.base import BaseCommand
+from django.shortcuts import render, get_object_or_404, HttpResponseRedirect
+from .forms import Vacform,Vacforml, ArticleForm
 from xxapp.models import Vacancy, Skill, Article
-# import requests
-# from bs4 import BeautifulSoup
 import requests
-# import json
-# import pprint
+from django.urls import reverse, reverse_lazy
+from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
+from django.views.generic.base import ContextMixin
+from django import forms
 
 # Create your views here. логика сайта
 def main_view(request):
@@ -59,12 +57,98 @@ def zapros(request):
         form = Vacform()
         return render(request, 'xxapp/zaprost.html', context={'form': form})
 
-
-def zaprosb(request):
-    if request.method == "POST":
-        return render(request, 'xxapp/zaprosb.html', context={})
-    else:
-        return render(request, 'xxapp/zaprosb.html', context={})
-
 def rezultatb(request):
     return render(request, 'xxapp/rezultatb.html', context={})
+
+def zaprosb(request):
+    if request.method == "GET":
+        forml = Vacforml()
+        return render(request, 'xxapp/zaprosb.html', context={'form': forml})
+    else:
+        forml = Vacforml(request.POST)
+        if forml.is_valid():
+            forml.save()
+            return render(request, 'xxapp/vacancyl1.html', context={'forml': forml})
+        else:
+         return render(request, 'xxapp/zaprosb.html', context={'form': forml})
+
+
+class NameContextMixin(ContextMixin):
+
+    def get_context_data(self, *args, **kwargs):
+        """
+        Отвечает за передачу параметров в контекст
+        :param args:
+        :param kwargs:
+        :return:
+        """
+        context = super().get_context_data(*args, **kwargs)
+
+        context['vac'] = 'РЕДАКТИРОВАНИЕ'
+        context['reg'] = 'РЕГИОН'
+        context['det'] = 'ДЕТАЛИ ПО ДАННОЙ ВАКАНСИИ:'
+
+        return context
+
+
+class VacancyView(ListView, NameContextMixin):
+    model = Vacancy
+    fields = '__all__'
+    template_name = 'vacancyl.html'
+    context_object_name = 'vacs'
+    def get_queryset(self):
+            """
+            Получение данных
+            :return:
+            """
+            return Vacancy.objects.all()
+
+class VacancyCreate(CreateView, NameContextMixin):
+    fields = '__all__'
+    model = Vacancy
+    success_url = reverse_lazy('xxapp:vacancyl')
+    template_name = 'vacancycreate.html'
+
+class VacancyUpd(UpdateView,NameContextMixin):
+    fields = '__all__'
+    model = Vacancy
+    context_object_name = 'vacs'
+    success_url = reverse_lazy('xxapp:vacancyl')
+    template_name = 'vacancycreate.html'
+
+class VacDeleteView(DeleteView,NameContextMixin):
+    fields = '__all__'
+    model = Vacancy
+    context_object_name = 'vacs'
+    success_url = reverse_lazy('xxapp:vacancyl')
+    template_name = 'del_confirm.html'
+
+class ArticleView(ListView,NameContextMixin):
+    model = Article
+    template_name = 'article.html'
+
+class ArtDeleteView(DeleteView,NameContextMixin):
+
+    model = Article
+    template_name = 'del_confirm.html'
+    success_url = reverse_lazy('xxapp:article')
+
+
+class VacDetailView(DetailView, NameContextMixin):
+    model = Skill
+    template_name = 'vac_detail.html'
+    success_url = reverse_lazy('xxapp:vacancyl')
+    context_object_name = 'skl'
+    def get(self, request, *args, **kwargs):
+        self.skill_id = kwargs['pk']
+        return super().get(request, *args, **kwargs)
+
+    def get_object(self, queryset=None):
+        
+        return get_object_or_404(Skill, pk=self.skill_id)
+
+# class Load():
+#     model = Article
+#     template_name = 'article.html'
+#     success_url = reverse_lazy('xapp:article')
+#         

@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% block title %} ПОИСК ПО ХХ - ПАРАМЕТРЫ ПОИСКА из шаблона Base {% endblock %}
+
+
+{% block content %}
+
+<div class="row">
+            <div class="col">
+                <h1> ВЫБЕРИТЕ ПАРАМЕТРЫ ПОИСКА по ХХ </h1><br>
+            </div>
+        </div>
+        <br>
+        <form name = 'Введите ключевое слово ', method="post">
+            <div class="form-group">
+           {% csrf_token %}
+            {{form.as_ul}}
+
+            </div>
+            <button type="submit" class="btn btn-primary"> ИЩЕМ???))) </button>
+        </form>
+
+{% endblock %}
