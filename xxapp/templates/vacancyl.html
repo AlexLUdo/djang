@@ -1,0 +1,39 @@
+{% extends "base1.html" %}
+{% block title %} СПИСОК ВАКАНСИЙ {% endblock %}
+
+
+{% block content %}
+{% csrf_token %}
+<div>
+     
+    <h1> ВОТ, ЧТО НАШЛОСЬ В НАШЕЙ БАЗЕ: </h1><br>
+     
+    /
+        <a  href="{% url 'xxapp:vacancyc' %}" > ДЛЯ СОЗДАНИЯ ВАКАНСИИ НАЖМИТЕ НА "ЭТОТ ТЕКСТ", чтобы отредактировать вакансию нажмите на САМУ вакансию:  </a>
+    \    
+
+        {%for item in vacs %}
+            <li>
+            <a href="{% url 'xxapp:vac_update' pk=item.pk %}">
+            В регионе {{item.reg}} по запросу {{item.vac}} есть {{item.num}} вакансий 
+            </a>
+
+            /
+            <a href="{% url 'xxapp:vac_det' pk=item.pk %}">
+            <font color="green">Посмотреть детали?</font>
+            </a>
+
+            /
+            <a href="{% url 'xxapp:vac_delete' pk=item.pk %}">
+            <font color="red">Удалить вакансию?</font>
+            </a>
+
+            </li>
+    
+        {% endfor %}
+    
+</div>
+            
+
+
+{% endblock %}

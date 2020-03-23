@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% block title %} ДОБАВЛЕНИЕ НОВЫХ ВАКАНСИЙ В ЛОКАЛЬНУЮ БАЗУ {% endblock %}
+
+
+{% block content %}
+
+<div class="row">
+            <div class="col">
+                <h3> ВВЕДИТЕ НАИМЕНОВАНИЕ ВАКАНСИИ, РЕГИОН И КОЛИЧЕСТВО ВАКАНСИЙ В РЕГИОНЕ </h3><br>
+            </div>
+        </div>
+        <br>
+        <form  method="post">
+            <div class="form-group">
+           {% csrf_token %}
+            {{form.as_ul}}
+
+            </div>
+            <button type="submit" class="btn btn-primary"> Сохраняем введеную информацию ???))) </button>
+        </form>
+
+{% endblock %}

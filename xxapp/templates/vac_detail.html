@@ -1,0 +1,24 @@
+{% extends "base1.html" %}
+{% block title %} ПОДРОБНОСТИ {% endblock %}
+
+
+{% block content %}
+
+
+     
+    <h1>{{det}}</h1><br>
+    
+<div class="row">
+    
+    <div class="col-lg-8 col-md-10 mx-auto">
+        {{skl}}
+    </div>
+    <a href="{% url 'xxapp:vac_update' pk=skl.pk %}">
+            Изменить
+        </a>
+</div>
+
+
+
+
+{% endblock %}
