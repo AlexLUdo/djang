@@ -1,0 +1,7 @@
+#основные запросы
+# all, get, filter
+#Фильры
+#Vacancy.objects.filter(vac='Python')
+#за исключением
+# Vacancy.objects.exclude(vac='Python')
+

@@ -7,7 +7,8 @@
 <div>
            
    <h1> Статьи 3DNEWS и ссылки на них НАШЕЙ БАЗЕ: </h1><br>
-        
+       <a href="{% url 'xxapp:loadart' %}">
+       <font color="green"> ЕЩЕ ЗАГРУЗИТЬ СТАТЬИ ? </font>
         {%for item in object_list%}
 
         <li>
@@ -20,6 +21,9 @@
         </a>
 
         {% endfor %}
+       <a href="{% url 'xxapp:loadart' %}">
+       <font color="green"> ЕЩЕ ЗАГРУЗИТЬ СТАТЬИ ? </font>
+       </a>
 </div>
             
 

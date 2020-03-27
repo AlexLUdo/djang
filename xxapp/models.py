@@ -1,27 +1,41 @@
 from django.db import models
+from userapp.models import XxUser
 
 # Create your models here. для хранения моделей
 
-class Vacancy(models.Model):
+class TimeStamp(models.Model):
+    """
+    Abstract - для нее не создаются новые таблицы
+    данные хранятся в каждом наследнике
+    """
+    create = models.DateTimeField(auto_now_add=True)
+    update = models.DateTimeField(auto_now=True)
 
-    vac = models.CharField(max_length=30)
-    reg = models.CharField(max_length=30)
-    num = models.IntegerField(blank=True)
+    class Meta:
+        abstract = True
+
+class Vacancy(TimeStamp, models.Model):
+
+    vac = models.CharField(max_length=30, verbose_name='Вакансия', null = True, blank=True)
+    reg = models.CharField( max_length=30, verbose_name='Регион', null = True, blank=True)
+    num = models.IntegerField(verbose_name='Количество', null = True, blank=True)
+    user = models.ForeignKey(XxUser, on_delete = models.CASCADE)
+    #null = True, blank=True - записать пустыми данными создаваемые поля
 
     def __str__(self):
         return f'{self.vac} {self.reg}  {self.num}'
 
 
-class Skill(models.Model):
+class Skill(TimeStamp, models.Model):
 
-    skl = models.CharField(max_length=300, blank=True)
-    reg = models.CharField(max_length=30)
+    skl = models.CharField(max_length=300, verbose_name='Требуемые знания', null = True, blank=True)
+    reg = models.CharField(max_length=30, verbose_name='Регион', null = True, blank=True)
 
     def __str__(self):
         return f'{self.skl} {self.reg}'
 
 
-class Article(models.Model):
+class Article(TimeStamp, models.Model):
 
     art = models.TextField(blank=True)
     ul = models.URLField(max_length=256)
