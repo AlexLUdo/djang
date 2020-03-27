@@ -1,0 +1,26 @@
+{% extends "base1.html" %}
+{% block title %} ВВОД ВАКАНСИЙ {% endblock %}
+
+
+{% block content %}
+{% csrf_token %}
+<div>
+           
+    <h1> ВВЕДИТЕ/ИЗМЕНИТЕ ДАННЫЕ ПО ВАКАНCИИ ДЛЯ СОХРАНЕНИЯ В НАШЕЙ БАЗЕ: </h1><br>
+        
+    <div class="row">
+    <h1>{{vac}}</h1>
+    <div class="col-lg-8 col-md-10 mx-auto">
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            {{item.pk}}
+            {{ form.as_p }}
+            <button type="submit" class="btn btn-primary"> Сохранить </button>
+        </form>
+    </div>
+</div>
+</div>
+            
+
+
+{% endblock %}
