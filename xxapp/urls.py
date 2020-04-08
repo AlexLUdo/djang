@@ -8,6 +8,7 @@ urlpatterns = [
     path('address/', views.contact, name='contact'),
     path('zapros/', views.zapros, name='zapros'),
     path('base/', views.zaprosb, name='zaprosb'),
+    path('loadart/', views.loadart, name='loadart'),
     path('vacancy/', views.VacancyView.as_view(), name='vacancyl'),
     path('vacancyc/', views.VacancyCreate.as_view(), name='vacancyc'),
     path('vac_update/<int:pk>/', views.VacancyUpd.as_view(), name='vac_update'),

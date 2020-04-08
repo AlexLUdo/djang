@@ -1,3 +1,5 @@
+from django.contrib.auth.decorators import login_required, user_passes_test
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.shortcuts import render, get_object_or_404, HttpResponseRedirect
 from .forms import Vacform,Vacforml, ArticleForm
 from xxapp.models import Vacancy, Skill, Article
@@ -7,13 +9,33 @@ from django.views.generic import ListView, DetailView, CreateView, UpdateView, D
 from django.views.generic.base import ContextMixin
 from django import forms
 
+from bs4 import BeautifulSoup
+@user_passes_test(lambda u: u.is_superuser)
+def loadart(request):
+    if request.method == "GET":
+        url = 'https://3dnews.ru/news'
+        r = requests.get(url)
+        r.encoding = 'win1251'
+        html = r.text
+        soup = BeautifulSoup(html, 'lxml')
+        head = soup.find('div', id='section-content').find_all('a', class_="entry-header")
+        for i in head:
+            link = 'https://3dnews.ru' + i.get('href')
+            heads= i.find('h1').string
+            data = {'head': heads,'link': link}
+            Article.objects.create(art=data['head'], ul=data['link'])
+        return HttpResponseRedirect(reverse('xxapp:article'))
+    else:
+        return HttpResponseRedirect(reverse('xxapp:article'))
+
+
 # Create your views here. логика сайта
 def main_view(request):
     return render(request, 'xxapp/indext.html', context={})
 
 def contact(request):
     return render(request, 'xxapp/address.html', context={})
-
+@login_required
 def zapros(request):
     if request.method == "POST":
          form = Vacform(request.POST)
@@ -67,6 +89,8 @@ def zaprosb(request):
     else:
         forml = Vacforml(request.POST)
         if forml.is_valid():
+            #Добавить в форму текущего пользователя - request.user
+            forml.instance.user = request.user
             forml.save()
             return render(request, 'xxapp/vacancyl1.html', context={'forml': forml})
         else:
@@ -103,20 +127,31 @@ class VacancyView(ListView, NameContextMixin):
             """
             return Vacancy.objects.all()
 
-class VacancyCreate(CreateView, NameContextMixin):
-    fields = '__all__'
+class VacancyCreate(LoginRequiredMixin, CreateView, NameContextMixin):
+    fields = ('vac','reg', 'num')
     model = Vacancy
     success_url = reverse_lazy('xxapp:vacancyl')
     template_name = 'vacancycreate.html'
 
-class VacancyUpd(UpdateView,NameContextMixin):
-    fields = '__all__'
+
+
+    def form_valid(self, form):
+        #self.request.user - текущий пользователь
+        form.instance.user = self.request.user
+        return super().form_valid(form)
+
+class VacancyUpd(LoginRequiredMixin,UpdateView,NameContextMixin):
+    fields = ('vac','reg', 'num')
     model = Vacancy
     context_object_name = 'vacs'
     success_url = reverse_lazy('xxapp:vacancyl')
     template_name = 'vacancycreate.html'
+    def form_valid(self, form):
+        #self.request.user - текущий пользователь
+        form.instance.user = self.request.user
+        return super().form_valid(form)
 
-class VacDeleteView(DeleteView,NameContextMixin):
+class VacDeleteView(LoginRequiredMixin,DeleteView,NameContextMixin):
     fields = '__all__'
     model = Vacancy
     context_object_name = 'vacs'
@@ -127,7 +162,7 @@ class ArticleView(ListView,NameContextMixin):
     model = Article
     template_name = 'article.html'
 
-class ArtDeleteView(DeleteView,NameContextMixin):
+class ArtDeleteView(LoginRequiredMixin,DeleteView,NameContextMixin):
 
     model = Article
     template_name = 'del_confirm.html'
