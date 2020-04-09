@@ -9,8 +9,6 @@ from django.views.generic import ListView, DetailView, CreateView, UpdateView, D
 from django.views.generic.base import ContextMixin
 from django import forms
 
-#
-
 from bs4 import BeautifulSoup
 @user_passes_test(lambda u: u.is_superuser)
 def loadart(request):
