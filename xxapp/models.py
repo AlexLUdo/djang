@@ -1,7 +1,24 @@
 from django.db import models
 from userapp.models import XxUser
 
+
 # Create your models here. для хранения моделей
+
+class ActiveManager(models.Manager):
+
+    def get_queryset(self):
+        all_objects = super().get_queryset()
+        return all_objects.filter(is_active=True)
+
+
+class IsActiveMixin(models.Model):
+    objects = models.Manager()
+    active_objects = ActiveManager()
+    #is_active = models.BooleanField(default=False)
+
+    class Meta:
+        abstract = True
+
 
 class TimeStamp(models.Model):
     """
@@ -43,10 +60,11 @@ class Skill(TimeStamp, models.Model):
         return f'{self.skl} {self.reg}'
 
 
-class Article(TimeStamp, models.Model):
+class Article(TimeStamp,  IsActiveMixin):
 
     art = models.TextField(blank=True,null = True)
     ul = models.URLField(max_length=256,null = True, blank=True)
+    is_active = models.BooleanField(default=False)
 
     def __str__(self):
         return f'{self.art} {self.ul}'

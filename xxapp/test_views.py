@@ -43,3 +43,11 @@ class ViewsTest(TestCase):
 
         response = self.client.get('/zapros/')
         self.assertEqual(response.status_code, 200)
+
+    def test_page_exist(self):
+        response = self.client.get('/article/?page=1')
+        self.assertEqual(response.status_code, 200)
+        # Что мы можем проверить
+    def test_page_unexist(self):
+        response = self.client.get('/article/?page=100')
+        self.assertEqual(response.status_code, 404)

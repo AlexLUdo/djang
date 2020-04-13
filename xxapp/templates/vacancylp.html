@@ -5,9 +5,9 @@
 {% block content %}
 {% csrf_token %}
 <div>
-        
+     
     <h1> ВОТ, ЧТО НАШЛОСЬ В НАШЕЙ БАЗЕ: </h1><br>
-
+     
     /
         <a  href="{% url 'xxapp:vacancyc' %}" > ДЛЯ СОЗДАНИЯ ВАКАНСИИ НАЖМИТЕ НА "ЭТОТ ТЕКСТ", чтобы отредактировать вакансию нажмите на САМУ вакансию:  </a>
     \    
@@ -31,26 +31,31 @@
             </li>
     
         {% endfor %}
-      На данной странице {{vacs|length}} вакансии
+        <!-- Pager -->
 
-    <div class="pagination">
-    <span class="step-links">
-        {% if page_obj.has_previous %}
-            <a href="?page=1">&laquo; Первая </a>
-            <a href="?page={{ page_obj.previous_page_number }}">ПРЕДЫДУЩАЯ</a>
-        {% endif %}
+        <div class="clearfix">
+            <div class="pagination">
 
-        <span class="current">
-             {{ page_obj.number }}-я страница из {{ page_obj.paginator.num_pages }}.
-        </span>
+            <span class="step-links">
+                {% if vacanc.has_previous %}
+                    <a href="?page={{ vacanc.previous_page_number }}">предыдущая страница</a>
+                {% endif %}
 
-        {% if page_obj.has_next %}
-            <a href="?page={{ page_obj.next_page_number }}">СЛЕДУЮЩАЯ</a>
-            <a href="?page={{ page_obj.paginator.num_pages }}">Последняя &raquo;</a>
-        {% endif %}
-    </span>
-    </div>
-   </div>
+                <span class="current">
+                     {{ vacanc.number }}-я страница из {{ vacanc.paginator.num_pages }}
+                </span>
+
+                {% if vacanc.has_next %}
+                <a href="?page={{ vacanc.next_page_number }}">следующая страница</a> 
+
+
+
+                {% endif %}
+
+
+            </span>
+            </div>
+        </div>
    </div> 
 </div>
             

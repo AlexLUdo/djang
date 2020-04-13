@@ -7,7 +7,7 @@ import requests
 from django.urls import reverse, reverse_lazy
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from django.views.generic.base import ContextMixin
-from django import forms
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 from bs4 import BeautifulSoup
 @user_passes_test(lambda u: u.is_superuser)
@@ -83,6 +83,7 @@ def rezultatb(request):
     return render(request, 'xxapp/rezultatb.html', context={})
 
 def zaprosb(request):
+   
     if request.method == "GET":
         forml = Vacforml()
         return render(request, 'xxapp/zaprosb.html', context={'form': forml})
@@ -96,6 +97,22 @@ def zaprosb(request):
         else:
          return render(request, 'xxapp/zaprosb.html', context={'form': forml})
 
+def postr_vyvod(request):
+    vacanc = Vacancy.objects.all()
+    paginator = Paginator(vacanc, 4)
+
+    page = request.GET.get('page')
+    try:
+        vacanc = paginator.page(page)
+    except PageNotAnInteger:
+            # If page is not an integer, deliver first page.
+            vacanc = paginator.page(1)
+    except EmptyPage:
+            # If page is out of range (e.g. 9999), deliver last page of results.
+            vacanc = paginator.page(paginator.num_pages)
+            #title ='СПИСОК ВАКАНСИЙ'
+            #title = title.capitalize()
+    return render(request, 'vacancylp.html', context={'vacs': vacanc, 'vacanc':vacanc})
 
 class NameContextMixin(ContextMixin):
 
@@ -111,15 +128,17 @@ class NameContextMixin(ContextMixin):
         context['vac'] = 'РЕДАКТИРОВАНИЕ'
         context['reg'] = 'РЕГИОН'
         context['det'] = 'ДЕТАЛИ ПО ДАННОЙ ВАКАНСИИ:'
-
+        context['title'] = ''
         return context
 
 
-class VacancyView(ListView, NameContextMixin):
+class VacancyView(ListView):
     model = Vacancy
     fields = '__all__'
     template_name = 'vacancyl.html'
     context_object_name = 'vacs'
+    paginate_by = 4
+
     def get_queryset(self):
             """
             Получение данных
@@ -157,10 +176,19 @@ class VacDeleteView(LoginRequiredMixin,DeleteView,NameContextMixin):
     context_object_name = 'vacs'
     success_url = reverse_lazy('xxapp:vacancyl')
     template_name = 'del_confirm.html'
+    
 
 class ArticleView(ListView,NameContextMixin):
     model = Article
     template_name = 'article.html'
+    paginate_by = 4
+    def get_queryset(self):
+            """
+            Получение данных
+            :return:
+            """
+            return Article.active_objects.all()
+
 
 class ArtDeleteView(LoginRequiredMixin,DeleteView,NameContextMixin):
 
