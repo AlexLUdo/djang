@@ -15,6 +15,8 @@ urlpatterns = [
     path('vac_delete/<int:pk>/', views.VacDeleteView.as_view(), name='vac_delete'),
     path('vac_det/<int:pk>/', views.VacDetailView.as_view(), name='vac_det'),
     path('article/', views.ArticleView.as_view(),  name='article'),
-    path('articled/<int:pk>/', views.ArtDeleteView.as_view(),  name='art_del')
+    path('articled/<int:pk>/', views.ArtDeleteView.as_view(),  name='art_del'),
+    path('vacancyp/', views.postr_vyvod, name='vacancyp'),
+
 ]
 

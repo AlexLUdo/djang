@@ -1,14 +1,16 @@
 {% extends "base1.html" %}
-{% block title %} Статьи загруженные в нашу базу {% endblock %}
+{% block title %} {{artlist}} {% endblock %}
 
 
 {% block content %}
 
 <div>
-           
+      На данной странице {{object_list|length}} статьи
    <h1> Статьи 3DNEWS и ссылки на них НАШЕЙ БАЗЕ: </h1><br>
+
        <a href="{% url 'xxapp:loadart' %}">
        <font color="green"> ЕЩЕ ЗАГРУЗИТЬ СТАТЬИ ? </font>
+        
         {%for item in object_list%}
 
         <li>
@@ -24,6 +26,23 @@
        <a href="{% url 'xxapp:loadart' %}">
        <font color="green"> ЕЩЕ ЗАГРУЗИТЬ СТАТЬИ ? </font>
        </a>
+    <div class="pagination">
+    <span class="step-links">
+        {% if page_obj.has_previous %}
+            <a href="?page=1">&laquo; Первая </a>
+            <a href="?page={{ page_obj.previous_page_number }}">ПРЕДЫДУЩАЯ</a>
+        {% endif %}
+
+        <span class="current">
+             {{ page_obj.number }}-я страница из {{ page_obj.paginator.num_pages }}.
+        </span>
+
+        {% if page_obj.has_next %}
+            <a href="?page={{ page_obj.next_page_number }}">СЛЕДУЮЩАЯ</a>
+            <a href="?page={{ page_obj.paginator.num_pages }}">Последняя &raquo;</a>
+        {% endif %}
+    </span>
+    </div>
 </div>
             
 
