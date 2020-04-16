@@ -137,14 +137,14 @@ class VacancyView(ListView):
     fields = '__all__'
     template_name = 'vacancyl.html'
     context_object_name = 'vacs'
-    paginate_by = 4
+    paginate_by = 6
 
     def get_queryset(self):
             """
             Получение данных
             :return:
             """
-            return Vacancy.objects.all()
+            return Vacancy.objects.all().select_related()
 
 class VacancyCreate(LoginRequiredMixin, CreateView, NameContextMixin):
     fields = ('vac','reg', 'num')
@@ -181,13 +181,13 @@ class VacDeleteView(LoginRequiredMixin,DeleteView,NameContextMixin):
 class ArticleView(ListView,NameContextMixin):
     model = Article
     template_name = 'article.html'
-    paginate_by = 4
+    paginate_by = 10
     def get_queryset(self):
             """
             Получение данных
             :return:
             """
-            return Article.active_objects.all()
+            return Article.active_objects.all().select_related()
 
 
 class ArtDeleteView(LoginRequiredMixin,DeleteView,NameContextMixin):
