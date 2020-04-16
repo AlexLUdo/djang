@@ -31,7 +31,7 @@
             </li>
     
         {% endfor %}
-      На данной странице {{vacs|length}} вакансии
+      На данной странице {{vacs|length}} ваканcий
 
     <div class="pagination">
     <span class="step-links">
@@ -41,7 +41,7 @@
         {% endif %}
 
         <span class="current">
-             {{ page_obj.number }}-я страница из {{ page_obj.paginator.num_pages }}.
+             {{ page_obj.number }}-я страница из {{ page_obj.paginator.num_pages }}
         </span>
 
         {% if page_obj.has_next %}

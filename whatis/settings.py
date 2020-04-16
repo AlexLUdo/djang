@@ -38,7 +38,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'xxapp',
-    'userapp'
+    'userapp',
+    'debug_toolbar'
 ]
 
 MIDDLEWARE = [
@@ -49,7 +50,12 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'debug_toolbar.middleware.DebugToolbarMiddleware',
+    'django.middleware.cache.UpdateCacheMiddleware',
+    'django.middleware.common.CommonMiddleware',
+    'django.middleware.cache.FetchFromCacheMiddleware',
 ]
+
 
 ROOT_URLCONF = 'whatis.urls'
 
@@ -137,3 +143,11 @@ LOGOUT_REDIRECT_URL = '/'
 #переход НА логин
 
 LOGIN_URL = '/users/login'
+
+# django-debug-toolbar
+
+INTERNAL_IPS = [
+    # ...
+    '127.0.0.1',
+    # ...
+]
