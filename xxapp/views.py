@@ -8,8 +8,9 @@ from django.urls import reverse, reverse_lazy
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from django.views.generic.base import ContextMixin
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
-
 from bs4 import BeautifulSoup
+
+
 @user_passes_test(lambda u: u.is_superuser)
 def loadart(request):
     if request.method == "GET":
