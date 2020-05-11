@@ -9,24 +9,20 @@
     </head>
 <body>
     <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
-        <a class="navbar-brand" href="/zapros/"> ПОИСК ПО ХХ </a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
 
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav mr-auto">
-                <li class="nav-item active">
-                    <a class="nav-link" href="/">  ГЛАВНАЯ СТРАНИЦА ПАРСЕРА <span class="sr-only">(current)</span></a>
-                </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="/zapros/"> ФОРМА ПОИСКА по ХХ </a>
+                    <a class="nav-link" href="/zapros/"> ФОРМА ПОИСКА по ХХ на сайте HH.RU </a>
                 </li>
                  <li class="nav-item">
-                    <a class="nav-link" href="/base/"> ВВЕСТИ ВАКАНСИИ В БАЗУ </a>
+                    <a class="nav-link" href="/base/"> ВВЕСТИ ВАКАНСИИ В "местную" БАЗУ </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="/vacancy/"> ВАКАНСИИ В ЛОКАЛЬНОЙ БАЗЕ </a>
+                    <a class="nav-link" href="/vacancy/"> ВАКАНСИИ В "местной" БАЗЕ </a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="/article/"> Статьи </a>
@@ -34,6 +30,18 @@
                 <li class="nav-item">
                     <a class="nav-link" href="/address/"> КОНТАКТЫ </a>
                 </li>
+                {% if user.is_authenticated %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'users:logout' %}" > {{user.username}} Выход </a>
+                    </li>
+                {% else %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'users:login' %}" > Вход </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'users:register' %}" > Регистрация </a>
+                    </li>
+                {% endif %}
             </ul>
         </div>
     </nav>

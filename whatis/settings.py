@@ -23,9 +23,9 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = '6cr)t(zs8c@)1d^qb7h0kls6vfc5tv6)mbsf3wxric_&zoxvu='
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = True #False #
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [ '127.0.0.1',]
 
 
 # Application definition
@@ -37,7 +37,12 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'xxapp'
+    'xxapp',
+    'userapp',
+    #'debug_toolbar'
+    'rest_framework',
+    # django-cleanup должен быть самым последним
+    'django_cleanup.apps.CleanupConfig'
 ]
 
 MIDDLEWARE = [
@@ -48,7 +53,12 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    #'debug_toolbar.middleware.DebugToolbarMiddleware',
+    # 'django.middleware.cache.UpdateCacheMiddleware',
+    # 'django.middleware.common.CommonMiddleware',
+    # 'django.middleware.cache.FetchFromCacheMiddleware',
 ]
+
 
 ROOT_URLCONF = 'whatis.urls'
 
@@ -63,6 +73,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'xxapp.context_processors.get_art',
             ],
         },
     },
@@ -120,3 +131,34 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 STATICFILES_DIRS =[os.path.join(BASE_DIR, 'static')]
+
+AUTH_USER_MODEL = 'userapp.XxUser'
+
+#переход после логина
+
+LOGIN_REDIRECT_URL = '/'
+
+#переход после логАУТА
+
+LOGOUT_REDIRECT_URL = '/'
+
+
+#переход НА логин
+
+LOGIN_URL = '/users/login'
+
+# django-debug-toolbar
+
+INTERNAL_IPS = [
+    # ...
+    '127.0.0.1',
+    # ...
+]
+
+REST_FRAMEWORK = {
+    # Use Django's standard `django.contrib.auth` permissions,
+    # or allow read-only access for unauthenticated users.
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly'
+    ]
+}
