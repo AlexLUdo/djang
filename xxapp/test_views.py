@@ -2,8 +2,6 @@ from django.test import Client
 from django.test import TestCase
 from faker import Faker
 from userapp.models import XxUser
-from .forms import Vacforml
-
 
 
 class ViewsTest(TestCase):
@@ -21,8 +19,8 @@ class ViewsTest(TestCase):
 
         # # post зарос
         response = self.client.post('/vacancyc/',
-                                   {'vac': self.fake.name(), 'reg': self.fake.name(),
-                                    'num': 100})
+                                    {'vac': self.fake.name(), 'reg': self.fake.name(),
+                                     'num': 100})
 
         self.assertEqual(response.status_code, 302)
 
@@ -48,6 +46,20 @@ class ViewsTest(TestCase):
         response = self.client.get('/article/?page=1')
         self.assertEqual(response.status_code, 200)
         # Что мы можем проверить
+
     def test_page_unexist(self):
         response = self.client.get('/article/?page=100')
         self.assertEqual(response.status_code, 404)
+
+    def api_test(self):
+        XxUser.objects.create_user(username='udo1', email='t1@t.com', password='testtttt1', job = 'test', is_superuser=1)
+
+        # доступно админу
+        response = self.client.get('/api/v0/vacancyes/')
+        self.assertEqual(response.status_code, 400)
+
+        # залогинимся
+        self.client.login(username='udo1', password='testtttt1')
+        response = self.client.get('/api/v0/vacancyes/')
+        print('Answer:  ', response.status_code)
+        self.assertEqual(response.status_code, 200)
