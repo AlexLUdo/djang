@@ -51,15 +51,22 @@ class ViewsTest(TestCase):
         response = self.client.get('/article/?page=100')
         self.assertEqual(response.status_code, 404)
 
-    def api_test(self):
-        XxUser.objects.create_user(username='udo1', email='t1@t.com', password='testtttt1', job = 'test', is_superuser=1)
+    def test_api(self):
+        XxUser.objects.create_user(username='udo1', email='t1@t.com', password='testtttt1', is_superuser='1')
 
-        # доступно админу
-        response = self.client.get('/api/v0/vacancyes/')
-        self.assertEqual(response.status_code, 400)
 
-        # залогинимся
+        response = self.client.get('/api/v0/skills/')
+        print('Answer1:  ', response.status_code)
+        self.assertEqual(response.status_code, 403)
+
+
         self.client.login(username='udo1', password='testtttt1')
-        response = self.client.get('/api/v0/vacancyes/')
-        print('Answer:  ', response.status_code)
+        response = self.client.get('/api/v0/skills/')
+        print('Answer2:  ', response.status_code)
+        self.assertEqual(response.status_code, 200)
+
+        token = 'bc9cd4b93ed55c04801b172fbba8e4cb9232c470'
+        headers = {'Authorization': f'Token {token}'}
+        response = self.client.get('/api/v0/skills/', headers=headers)
+        print('Answer3:  ', response.status_code)
         self.assertEqual(response.status_code, 200)

@@ -13,7 +13,7 @@ class VacancyViewSet(viewsets.ModelViewSet):
 
 
 class ArticleViewSet(viewsets.ModelViewSet):
-    permission_classes = [IsAuthor]
+    permission_classes = [IsAdminUser]
     queryset = Article.objects.all()
     serializer_class = ArticleSerializer
 
