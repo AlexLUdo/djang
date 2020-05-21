@@ -2,8 +2,6 @@ from django.test import Client
 from django.test import TestCase
 from faker import Faker
 from userapp.models import XxUser
-from .forms import Vacforml
-
 
 
 class ViewsTest(TestCase):
@@ -21,8 +19,8 @@ class ViewsTest(TestCase):
 
         # # post зарос
         response = self.client.post('/vacancyc/',
-                                   {'vac': self.fake.name(), 'reg': self.fake.name(),
-                                    'num': 100})
+                                    {'vac': self.fake.name(), 'reg': self.fake.name(),
+                                     'num': 100})
 
         self.assertEqual(response.status_code, 302)
 
@@ -48,6 +46,27 @@ class ViewsTest(TestCase):
         response = self.client.get('/article/?page=1')
         self.assertEqual(response.status_code, 200)
         # Что мы можем проверить
+
     def test_page_unexist(self):
         response = self.client.get('/article/?page=100')
         self.assertEqual(response.status_code, 404)
+
+    def test_api(self):
+        XxUser.objects.create_user(username='udo1', email='t1@t.com', password='testtttt1', is_superuser='1')
+
+
+        response = self.client.get('/api/v0/skills/')
+        print('Answer1:  ', response.status_code)
+        self.assertEqual(response.status_code, 403)
+
+
+        self.client.login(username='udo1', password='testtttt1')
+        response = self.client.get('/api/v0/skills/')
+        print('Answer2:  ', response.status_code)
+        self.assertEqual(response.status_code, 200)
+
+        token = 'bc9cd4b93ed55c04801b172fbba8e4cb9232c470'
+        headers = {'Authorization': f'Token {token}'}
+        response = self.client.get('/api/v0/skills/', headers=headers)
+        print('Answer3:  ', response.status_code)
+        self.assertEqual(response.status_code, 200)
